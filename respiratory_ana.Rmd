@@ -1,0 +1,301 @@
+---
+title: "capstone"
+author: "KuanCheng"
+date: "2024-09-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(foreign)
+library(tidyverse)
+library(ggplot2)
+```
+
+#Loading the raw data files, extension is where it currently is
+```{r}
+demography = "DEMO_1112.XPT"
+demography = read.xport(demography)
+
+body = "body_1112.XPT"
+body = read.xport(body)
+
+condition = "condition_1112.XPT"
+condition = read.xport(condition) 
+
+respiratory = "respire_1112.XPT"
+respiratory = read.xport(respiratory) 
+
+smoke = "smoke_1112.XPT"
+smoke = read.xport(smoke)
+
+exercise = "exercise_1112.XPT"
+exercise = read.xport(exercise) 
+```
+#GENDER, AGE, ever smoke, started smoking, Do now smoke cigarettes, How long since quit smoking, Ever have asthma, Age first had asthma, 
+#Still have asthma, Ever had emphysema, Age had emphysema, Ever had chronic bronchitis, still have chronic bronchitis
+#Close relative had asthma?
+```{r}
+total <- merge(demography,condition,by="SEQN")
+total_1 <- merge(total, smoke,by="SEQN")
+total_2 <- merge(total_1, body, by="SEQN")
+df_1112 <- total_2[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
+                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
+                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1112_2 = df_1112[complete.cases( df_1112[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
+df_1112_2$BMI <- cut(df_1112_2$BMXBMI, breaks = c(0,18.5,25,30,40,100), labels = c("1","2","3","4", "5"))
+```
+
+
+#year 1314
+```{r}
+demo_1314 = "demo_1314.XPT"
+demo_1314 = read.xport(demo_1314)
+
+body_1314 = "body_1314.XPT"
+body_1314 = read.xport(body_1314)
+
+condition_1314 = "condition_1314.XPT"
+condition_1314 = read.xport(condition_1314)
+
+smoke_1314 = "smoke_1314.XPT"
+smoke_1314 = read.xport(smoke_1314)
+
+m1314_1 = merge(demo_1314, body_1314, by="SEQN")
+m1314_2 = merge(m1314_1, condition_1314,by="SEQN")
+m1314_3 = merge(m1314_2, smoke_1314,by="SEQN")
+
+df_1314 = m1314_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
+                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
+                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1314_2 = df_1314[complete.cases( df_1314[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
+df_1314_2$BMI <- cut(df_1314_2$BMXBMI, breaks = c(0,18.5, 25, 30, 40,100), labels = c("1","2","3","4", "5"))
+```
+
+#year 1516
+```{r}
+demo_1516 = "demo_1516.XPT"
+demo_1516 = read.xport(demo_1516)
+
+body_1516 = "body_1516.XPT"
+body_1516 = read.xport(body_1516)
+
+condition_1516 = "condition_1516.XPT"
+condition_1516 = read.xport(condition_1516)
+
+smoke_1516 = "smoke_1516.XPT"
+smoke_1516 = read.xport(smoke_1516)
+
+m1516_1 = merge(demo_1516, body_1516, by="SEQN")
+m1516_2 = merge(m1516_1, condition_1516,by="SEQN")
+m1516_3 = merge(m1516_2, smoke_1516,by="SEQN")
+
+df_1516 = m1516_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
+                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
+                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1516_2 = df_1516[complete.cases( df_1516[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
+df_1516_2$BMI <- cut(df_1516_2$BMXBMI, breaks = c(0,18.5, 25, 30, 40,100), labels = c("1","2","3","4", "5"))
+```
+
+#year 1718
+```{r}
+demo_1718 = "demo_1718.XPT"
+demo_1718 = read.xport(demo_1718)
+
+body_1718 = "body_1718.XPT"
+body_1718 = read.xport(body_1718)
+
+condition_1718 = "condition_1718.XPT"
+condition_1718 = read.xport(condition_1718)
+
+smoke_1718 = "smoke_1718.XPT"
+smoke_1718 = read.xport(smoke_1718)
+
+m1718_1 = merge(demo_1718, body_1718, by="SEQN")
+m1718_2 = merge(m1718_1, condition_1718,by="SEQN")
+m1718_3 = merge(m1718_2, smoke_1718,by="SEQN")
+
+df_1718 = m1718_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
+                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
+                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1718_2 = df_1718[complete.cases(df_1718[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
+df_1718_2$BMI <- cut(df_1718_2$BMXBMI, breaks = c(0,18.5, 25, 30, 40,100), labels = c("1","2","3","4", "5"))
+```
+
+#combine the year data
+```{r}
+df <- rbind(df_1314_2, df_1112_2)
+df1 <- rbind(df, df_1516_2)
+df2 <- rbind(df1, df_1718_2)
+```
+
+```{r}
+df_1314_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
+df_1112_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
+df_1516_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
+df_1718_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
+
+df2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
+df2$PLEVEL = cut(df2$INDFMPIR, breaks = c(0,1.5, 4, 6), labels = c("1", "2", "3"))
+df2
+```
+
+
+```{r}
+df5 <- df2[df2["MCQ010"] == 1 | df2["MCQ160G"] == 1 | df2["MCQ160K"],] 
+df2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) #Total ever disease
+df2 %>% filter(MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+
+df2 %>% filter(RIAGENDR == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(RIAGENDR == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(RIAGENDR == 1) #Total male
+
+df2 %>% filter(RIAGENDR == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(RIAGENDR == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(RIAGENDR == 2) #Total female
+
+
+```
+
+#smoke filter
+```{r}
+df2 %>% filter(SMQ020 == 2) # Never smoke
+df2 %>% filter(SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Never smoke have disease
+df2 %>% filter(SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
+
+df2 %>% filter(SMQ040 == 1 | SMQ040 == 2)
+df2 %>% filter((SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # now smoke have disease
+df2 %>% filter((SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
+
+df2 %>% filter(SMQ040 == 3  & SMQ020 == 1)
+df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # quit have disease
+df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
+```
+
+
+#BMI filter
+```{r}
+df2 %>% filter(BMI == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(BMI == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(BMI == 1)
+
+df2 %>% filter(BMI == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(BMI == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(BMI == 2)
+
+df2 %>% filter(BMI == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(BMI == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(BMI == 3)
+
+df2 %>% filter(BMI == 4 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(BMI == 4 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(BMI == 4)
+
+df2 %>% filter(BMI == 5 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(BMI == 5 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(BMI == 5)
+```
+
+#Poverty filter
+```{r}
+df2 %>% filter(PLEVEL == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(PLEVEL == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(PLEVEL == 1)
+
+df2 %>% filter(PLEVEL == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(PLEVEL == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(PLEVEL == 2)
+
+df2 %>% filter(PLEVEL == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(PLEVEL == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(PLEVEL == 3)
+```
+
+#Edu filter
+```{r}
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 1 | DMDEDUC2 == 2)
+
+df2 %>% filter(DMDEDUC2 == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(DMDEDUC2 == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 3)
+
+df2 %>% filter(DMDEDUC2 == 4 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(DMDEDUC2 == 4 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 4)
+
+df2 %>% filter(DMDEDUC2 == 5 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(DMDEDUC2 == 5 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 5)
+```
+
+
+
+#BMI filter
+```{r}
+df2 %>% filter(BMI == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 1, now smoke, have disease
+df2 %>% filter(BMI == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 1, now smoke, no disease
+df2 %>% filter(BMI == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ040 == 3 & SMQ020 == 1) #BMI = 1, quit smoke, have disease
+df2 %>% filter(BMI == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ040 == 3 & SMQ020 == 1) #BMI = 1, quit smoke, no disease
+df2 %>% filter(BMI == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ020 == 2) #BMI = 1, never smoke, have disease
+df2 %>% filter(BMI == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ020 == 2) #BMI = 1, never smoke, no disease
+df2 %>% filter(BMI == 1 & (SMQ040 == 1 | SMQ040 == 2))
+df2 %>% filter(BMI == 1 & SMQ040 == 3 & SMQ020 == 1)
+df2 %>% filter(BMI == 1 & SMQ020 == 2)
+
+df2 %>% filter(BMI == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 2, now smoke, have disease
+df2 %>% filter(BMI == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 2, now smoke, no disease
+df2 %>% filter(BMI == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ040 == 3 & SMQ020 == 1) #BMI = 2, quit smoke, have disease
+df2 %>% filter(BMI == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ040 == 3 & SMQ020 == 1) #BMI = 2, quit smoke, no disease
+df2 %>% filter(BMI == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ020 == 2) #BMI = 2, never smoke, have disease
+df2 %>% filter(BMI == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ020 == 2) #BMI = 2, never smoke, no disease
+df2 %>% filter(BMI == 2 & (SMQ040 == 1 | SMQ040 == 2))
+df2 %>% filter(BMI == 2 & SMQ040 == 3 & SMQ020 == 1)
+df2 %>% filter(BMI == 2 & SMQ020 == 2)
+
+df2 %>% filter(BMI == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 3, now smoke, have disease
+df2 %>% filter(BMI == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 3, now smoke, no disease
+df2 %>% filter(BMI == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ040 == 3 & SMQ020 == 1) #BMI = 3, quit smoke, have disease
+df2 %>% filter(BMI == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ040 == 3 & SMQ020 == 1) #BMI = 3, quit smoke, no disease
+df2 %>% filter(BMI == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ020 == 2) #BMI = 3, never smoke, have disease
+df2 %>% filter(BMI == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ020 == 2) #BMI = 3, never smoke, no disease
+df2 %>% filter(BMI == 3 & (SMQ040 == 1 | SMQ040 == 2))
+df2 %>% filter(BMI == 3 & SMQ040 == 3 & SMQ020 == 1)
+df2 %>% filter(BMI == 3 & SMQ020 == 2)
+
+df2 %>% filter(BMI == 4 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 4, now smoke, have disease
+df2 %>% filter(BMI == 4 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 4, now smoke, no disease
+df2 %>% filter(BMI == 4 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ040 == 3 & SMQ020 == 1) #BMI = 4, quit smoke, have disease
+df2 %>% filter(BMI == 4 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ040 == 3 & SMQ020 == 1) #BMI = 4, quit smoke, no disease
+df2 %>% filter(BMI == 4 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ020 == 2) #BMI = 4, never smoke, have disease
+df2 %>% filter(BMI == 4 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ020 == 2) #BMI = 4, never smoke, no disease
+df2 %>% filter(BMI == 4 & (SMQ040 == 1 | SMQ040 == 2))
+df2 %>% filter(BMI == 4 & SMQ040 == 3 & SMQ020 == 1)
+df2 %>% filter(BMI == 4 & SMQ020 == 2)
+
+df2 %>% filter(BMI == 5 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 5, now smoke, have disease
+df2 %>% filter(BMI == 5 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & (SMQ040 == 1 | SMQ040 == 2)) #BMI = 5, now smoke, no disease
+df2 %>% filter(BMI == 5 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ040 == 3 & SMQ020 == 1) #BMI = 5, quit smoke, have disease
+df2 %>% filter(BMI == 5 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ040 == 3 & SMQ020 == 1) #BMI = 5, quit smoke, no disease
+df2 %>% filter(BMI == 5 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) & SMQ020 == 2) #BMI = 5, never smoke, have disease
+df2 %>% filter(BMI == 5 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 & SMQ020 == 2) #BMI = 5, never smoke, no disease
+df2 %>% filter(BMI == 5 & (SMQ040 == 1 | SMQ040 == 2))
+df2 %>% filter(BMI == 5 & SMQ040 == 3 & SMQ020 == 1)
+df2 %>% filter(BMI == 5 & SMQ020 == 2)
+```
+
+#smoke filter
+```{r}
+df2 %>% filter(SMQ020 == 2) # Never smoke
+df2 %>% filter(SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Never smoke have disease
+df2 %>% filter(SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
+
+df2 %>% filter(SMQ040 == 1 | SMQ040 == 2)
+df2 %>% filter((SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # now smoke have disease
+df2 %>% filter((SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
+
+df2 %>% filter(SMQ040 == 3  & SMQ020 == 1)
+df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # quit have disease
+df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
+```
