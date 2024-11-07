@@ -23,14 +23,8 @@ body = read.xport(body)
 condition = "condition_1112.XPT"
 condition = read.xport(condition) 
 
-respiratory = "respire_1112.XPT"
-respiratory = read.xport(respiratory) 
-
 smoke = "smoke_1112.XPT"
 smoke = read.xport(smoke)
-
-exercise = "exercise_1112.XPT"
-exercise = read.xport(exercise) 
 ```
 #GENDER, AGE, ever smoke, started smoking, Do now smoke cigarettes, How long since quit smoking, Ever have asthma, Age first had asthma, 
 #Still have asthma, Ever had emphysema, Age had emphysema, Ever had chronic bronchitis, still have chronic bronchitis
@@ -39,9 +33,8 @@ exercise = read.xport(exercise)
 total <- merge(demography,condition,by="SEQN")
 total_1 <- merge(total, smoke,by="SEQN")
 total_2 <- merge(total_1, body, by="SEQN")
-df_1112 <- total_2[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
-                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
-                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1112 <- total_2[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010",
+                "MCQ160G", "MCQ160K", "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
 df_1112_2 = df_1112[complete.cases( df_1112[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
 df_1112_2$BMI <- cut(df_1112_2$BMXBMI, breaks = c(0,18.5,25,30,40,100), labels = c("1","2","3","4", "5"))
 ```
@@ -65,9 +58,8 @@ m1314_1 = merge(demo_1314, body_1314, by="SEQN")
 m1314_2 = merge(m1314_1, condition_1314,by="SEQN")
 m1314_3 = merge(m1314_2, smoke_1314,by="SEQN")
 
-df_1314 = m1314_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
-                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
-                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1314 = m1314_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010",
+                "MCQ160G", "MCQ160K", "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
 df_1314_2 = df_1314[complete.cases( df_1314[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
 df_1314_2$BMI <- cut(df_1314_2$BMXBMI, breaks = c(0,18.5, 25, 30, 40,100), labels = c("1","2","3","4", "5"))
 ```
@@ -90,9 +82,8 @@ m1516_1 = merge(demo_1516, body_1516, by="SEQN")
 m1516_2 = merge(m1516_1, condition_1516,by="SEQN")
 m1516_3 = merge(m1516_2, smoke_1516,by="SEQN")
 
-df_1516 = m1516_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
-                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
-                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1516 = m1516_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010",
+                "MCQ160G", "MCQ160K", "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
 df_1516_2 = df_1516[complete.cases( df_1516[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
 df_1516_2$BMI <- cut(df_1516_2$BMXBMI, breaks = c(0,18.5, 25, 30, 40,100), labels = c("1","2","3","4", "5"))
 ```
@@ -115,9 +106,8 @@ m1718_1 = merge(demo_1718, body_1718, by="SEQN")
 m1718_2 = merge(m1718_1, condition_1718,by="SEQN")
 m1718_3 = merge(m1718_2, smoke_1718,by="SEQN")
 
-df_1718 = m1718_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010", "MCQ025",
-                "MCQ035","MCQ160G", "MCQ160K", "MCQ170K", 
-                "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
+df_1718 = m1718_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","SMQ050Q", "MCQ010",
+                "MCQ160G", "MCQ160K", "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
 df_1718_2 = df_1718[complete.cases(df_1718[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
 df_1718_2$BMI <- cut(df_1718_2$BMXBMI, breaks = c(0,18.5, 25, 30, 40,100), labels = c("1","2","3","4", "5"))
 ```
