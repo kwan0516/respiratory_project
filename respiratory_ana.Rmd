@@ -126,13 +126,37 @@ df_1516_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 df_1718_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 
 df2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
+# poverty level
 df2$PLEVEL = cut(df2$INDFMPIR, breaks = c(0,1.5, 4, 6), labels = c("1", "2", "3"))
 df2
 ```
-
-
+#age distribution
 ```{r}
-df5 <- df2[df2["MCQ010"] == 1 | df2["MCQ160G"] == 1 | df2["MCQ160K"],] 
+# check age distribution. set 20-39, 40-59, 60-80 three groups.
+summary(df2$RIDAGEYR)
+
+# plot distribution in percentage
+df2$age_group <- cut(df2$RIDAGEYR, breaks = c(20, 39, 59, 80), labels = c("20-39", "40-59", "60-80"), right = TRUE)
+
+age_distribution <- prop.table(table(df2$age_group)) * 100
+barplot(age_distribution, main = "Age Distribution", xlab = "Age Group", ylab = "Percentage (%)", ylim = c(0, 40))
+
+```
+#age filter
+```{r}
+df2 %>% filter(age_group == "20-39" & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) #group1
+df2 %>% filter(age_group == "20-39" & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+
+df2 %>% filter(age_group == "40-59" & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) #group2
+df2 %>% filter(age_group == "40-59" & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+
+df2 %>% filter(age_group == "60-80" & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) #group3
+df2 %>% filter(age_group == "60-80" & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+```
+
+
+#gender filter
+```{r}
 df2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1) #Total ever disease
 df2 %>% filter(MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
 
@@ -143,7 +167,6 @@ df2 %>% filter(RIAGENDR == 1) #Total male
 df2 %>% filter(RIAGENDR == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
 df2 %>% filter(RIAGENDR == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
 df2 %>% filter(RIAGENDR == 2) #Total female
-
 
 ```
 
@@ -202,6 +225,12 @@ df2 %>% filter(PLEVEL == 3)
 ```
 
 #Edu filter
+```{r}
+# group it to Less than High School (Group 1), High School Graduate (Group 2), College Graduate (Group 3), and Postgraduate Degree (Group 4)
+df$education_group <- factor(df$DMDEDUC2, levels = c(1, 2, 3, 4, 5), labels = c("Less than High School", "Less than High School", 
+                                   "High School Graduate", "College Graduate", "Postgraduate Degree"))
+```
+
 ```{r}
 df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
 df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
@@ -289,3 +318,31 @@ df2 %>% filter(SMQ040 == 3  & SMQ020 == 1)
 df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # quit have disease
 df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
 ```
+
+```{r}
+# we can make table like this
+library(dplyr)
+library(tidyr)
+
+total_ever_disease <- df2 %>%
+  filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)  # Total ever disease
+
+non_case <- df2 %>%
+  filter(MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)  # Non-case
+
+gender_summary <- df2 %>%
+  group_by(RIAGENDR) %>%
+  summarise(
+    TotalEverDisease = sum(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1, na.rm = TRUE),
+    NonCase = sum(MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2, na.rm = TRUE),
+    Total = n() ) %>%
+  mutate(PercentageEverDisease = (TotalEverDisease / Total) * 100,
+    PercentageNonCase = (NonCase / Total) * 100)
+
+gender_summary
+
+```
+
+
+
+
