@@ -344,5 +344,73 @@ gender_summary
 ```
 
 
+#2-way chi square BMI
+```{r}
+# create matrix with 2 columns and 5 rows
+data= matrix(c(78,295,923,4990,1107,5724,1316,5210,541,1104), ncol=2, byrow=TRUE)
+ 
+# specify the column names and row names of matrix
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Under weight','Healthy','Overweight','Obesity', 'Severe obesity')
+# assign to table
+BMI_dis=as.table(data)
+
+#chi square test
+chisq <- chisq.test(BMI_dis)
+chisq
+round(chisq$residuals,2)
+alpha <- .05
+alpa_adj <- alpha/(nrow(data)*ncol(data))
+t_crit <- qnorm(alpha_adj/2)
+cohenW(BMI_dis)
+```
+
+#2-way chi square BMI group with now smoking
+```{r}
+data = matrix(c(38,93,290,1011,256,990,306,844,118,178), ncol = 2, byrow = TRUE)
+
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Under weight','Healthy','Overweight','Obesity', 'Severe obesity')
+
+BMI_smoke= as.table(data)
+
+#chi square test
+chisq <- chisq.test(BMI_smoke)
+chisq
+round(chisq$residuals,2)
+alpha <- .05
+alpa_adj <- alpha/(nrow(data)*ncol(data))
+t_crit <- qnorm(alpha_adj/2)
+cohenW(BMI_dis)
+```
+#2-way chi square BMI group with quit smoking
+```{r}
+data = matrix(c(17,33,197,890,323,1387,377,1284,156,247), ncol = 2, byrow = TRUE)
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Under weight','Healthy','Overweight','Obesity', 'Severe obesity')
+
+BMI_quit= as.table(data)
+#chi square test
+chisq <- chisq.test(BMI_quit)
+chisq
+round(chisq$residuals,2)
+alpha <- .05
+alpa_adj <- alpha/(nrow(data)*ncol(data))
+t_crit <- qnorm(alpha_adj/2)
+```
+
+```{r}
+data = matrix(c(23,169,435,3085,527,3343,632,3076,267,679), ncol = 2, byrow = TRUE)
+
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Under weight','Healthy','Overweight','Obesity', 'Severe obesity')
+
+BMI_Nsmoke= as.table(data)
+#chi square test
+chisq <- chisq.test(BMI_Nsmoke)
+chisq
+round(chisq$residuals,2)
+```
+
 
 
