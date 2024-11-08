@@ -12,20 +12,22 @@ library(tidyverse)
 library(ggplot2)
 ```
 
+#Collected data from each cohort of NHANES Demographic Variables, Body Measures, Medical Conditions and Smoking - Cigarette Use dataset.
 #Loading the raw data files, extension is where it currently is
 ```{r}
-demography = "DEMO_1112.XPT"
+demography = "DEMO_1112.XPT" # Demographic Variables
 demography = read.xport(demography)
 
-body = "body_1112.XPT"
+body = "body_1112.XPT" # Body Measures
 body = read.xport(body)
 
-condition = "condition_1112.XPT"
+condition = "condition_1112.XPT" # Medical Conditions
 condition = read.xport(condition) 
 
-smoke = "smoke_1112.XPT"
+smoke = "smoke_1112.XPT" # Smoking - Cigarette Use
 smoke = read.xport(smoke)
 ```
+
 #GENDER, AGE, ever smoke, started smoking, Do now smoke cigarettes, How long since quit smoking, Ever have asthma, Age first had asthma, 
 #Still have asthma, Ever had emphysema, Age had emphysema, Ever had chronic bronchitis, still have chronic bronchitis
 #Close relative had asthma?
@@ -110,6 +112,20 @@ df_1718 = m1718_3[c("SEQN","RIAGENDR", "RIDAGEYR", "SMQ020","SMD030","SMQ040","S
                 "MCQ160G", "MCQ160K", "MCQ300B", "BMXBMI", "INDFMPIR","DMDEDUC2")]
 df_1718_2 = df_1718[complete.cases(df_1718[ ,c("MCQ010", "MCQ160G", "MCQ160K")]),]
 df_1718_2$BMI <- cut(df_1718_2$BMXBMI, breaks = c(0,18.5, 25, 30, 40,100), labels = c("1","2","3","4", "5"))
+```
+#count data valid / total
+```{r}
+# total
+df_1112 # 6549
+df_1314 # 6979
+df_1516 # 6744
+df_1718 # 6401
+
+# valid
+df_1112_2 # 5318
+df_1314_2 # 5588
+df_1516_2 # 5474
+df_1718_2 # 5265
 ```
 
 #combine the year data
