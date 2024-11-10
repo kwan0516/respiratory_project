@@ -376,7 +376,7 @@ chisq <- chisq.test(BMI_dis)
 chisq
 round(chisq$residuals,2)
 alpha <- .05
-alpa_adj <- alpha/(nrow(data)*ncol(data))
+alpha_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
 cohenW(BMI_dis)
 ```
@@ -411,7 +411,7 @@ chisq <- chisq.test(BMI_quit)
 chisq
 round(chisq$residuals,2)
 alpha <- .05
-alpa_adj <- alpha/(nrow(data)*ncol(data))
+alpha_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
 ```
 
