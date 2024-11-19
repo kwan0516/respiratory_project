@@ -144,7 +144,21 @@ df_1718_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 df2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 # poverty level
 df2$PLEVEL = cut(df2$INDFMPIR, breaks = c(0,1.5, 4, 6), labels = c("1", "2", "3"))
-df2
+# group it to Less than High School (Group 1), High School Graduate (Group 2), College Graduate (Group 3), and Postgraduate Degree (Group 4)
+df2$education_group <- factor(df2$DMDEDUC2, levels = c(1, 2, 3, 4, 5), labels = c("1", "1", 
+                                   "2", "3", "4"))
+# disease condition
+df2 <- df2 %>% mutate(is_disease = case_when(
+  MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1 ~ 1,
+  MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 ~ 0
+))
+# smoke condition
+df2 <- df2 %>% mutate(smoke = case_when(
+  SMQ020 == 2 ~ 0,
+  SMQ040 == 3 & SMQ020 == 1 ~ 1,
+  SMQ040 == 1 | SMQ040 == 2 ~ 2
+))
+df3 <- df2[complete.cases(df2[,c("is_disease", "RIDAGEYR", "BMXBMI", "education_group", "PLEVEL", "smoke")]),]
 ```
 #age distribution
 ```{r}
@@ -238,13 +252,6 @@ df2 %>% filter(PLEVEL == 2)
 df2 %>% filter(PLEVEL == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
 df2 %>% filter(PLEVEL == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
 df2 %>% filter(PLEVEL == 3)
-```
-
-#Edu filter
-```{r}
-# group it to Less than High School (Group 1), High School Graduate (Group 2), College Graduate (Group 3), and Postgraduate Degree (Group 4)
-df$education_group <- factor(df$DMDEDUC2, levels = c(1, 2, 3, 4, 5), labels = c("Less than High School", "Less than High School", 
-                                   "High School Graduate", "College Graduate", "Postgraduate Degree"))
 ```
 
 ```{r}
@@ -426,6 +433,89 @@ BMI_Nsmoke= as.table(data)
 chisq <- chisq.test(BMI_Nsmoke)
 chisq
 round(chisq$residuals,2)
+```
+
+#2-way chi square Poverty level
+```{r}
+# create matrix with 2 columns and 5 rows
+data= matrix(c(1593,5675,1283,5887,760,4090), ncol=2, byrow=TRUE)
+ 
+# specify the column names and row names of matrix
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Low','Medium','High')
+# assign to table
+PL_dis=as.table(data)
+
+#chi square test
+chisq <- chisq.test(PL_dis)
+chisq
+round(chisq$residuals,2)
+alpha <- .05
+alpha_adj <- alpha/(nrow(data)*ncol(data))
+t_crit <- qnorm(alpha_adj/2)
+```
+
+#2-way chi square Education Level
+```{r}
+# create matrix with 2 columns and 5 rows
+data= matrix(c(853,3945,922,3874,1398,5226,847,4507), ncol=2, byrow=TRUE)
+ 
+# specify the column names and row names of matrix
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Less than High School','High School Graduate','College Graduate','Postgraduate Degree')
+# assign to table
+Edu_dis=as.table(data)
+
+#chi square test
+chisq <- chisq.test(Edu_dis)
+chisq
+round(chisq$residuals,2)
+alpha <- .05
+alpha_adj <- alpha/(nrow(data)*ncol(data))
+t_crit <- qnorm(alpha_adj/2)
+```
+
+#2-way chi square Smoking habit
+```{r}
+# create matrix with 2 columns and 5 rows
+data= matrix(c(1030,3157,1087,3913,1906,10485), ncol=2, byrow=TRUE)
+ 
+# specify the column names and row names of matrix
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Now smoking','Quit','Never smoking')
+# assign to table
+smoke_dis=as.table(data)
+
+#chi square test
+chisq <- chisq.test(smoke_dis)
+chisq
+round(chisq$residuals,2)
+alpha <- .05
+alpha_adj <- alpha/(nrow(data)*ncol(data))
+t_crit <- qnorm(alpha_adj/2)
+```
+
+#logistic regression 
+```{r}
+df3$is_disease <- factor(df3$is_disease)
+df3$education_group <- factor(df3$education_group)
+df3$smoke <- factor(df3$smoke)
+df3$PLEVEL <- factor(df3$PLEVEL)
+
+#split data
+df3.spilt <- sample(1:nrow(df3),size = ceiling(0.80*nrow(df3)),replace = FALSE)
+# training set
+df3.train <- df3[df3.spilt,]
+# test set
+df3.test <- df3[-df3.spilt,]
+
+log <- glm(is_disease ~ smoke + RIDAGEYR + BMXBMI + PLEVEL + education_group, family = "binomial", data = df3.train)
+summary(log)
+```
+
+```{r}
+df3.test$pre_disease <- predict(log, newdata = df3.test, type = "response")
+df3.test$pre_disease
 ```
 
 
