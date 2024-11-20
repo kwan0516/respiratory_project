@@ -143,22 +143,22 @@ df_1718_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 
 df2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 # poverty level
-df2$PLEVEL = cut(df2$INDFMPIR, breaks = c(0,1.5, 4, 6), labels = c("1", "2", "3"))
+df2$PLevel_ = cut(df2$INDFMPIR, breaks = c(0,1.5, 4, 6), labels = c("Low", "Medium", "High"))
 # group it to Less than High School (Group 1), High School Graduate (Group 2), College Graduate (Group 3), and Postgraduate Degree (Group 4)
-df2$education_group <- factor(df2$DMDEDUC2, levels = c(1, 2, 3, 4, 5), labels = c("1", "1", 
-                                   "2", "3", "4"))
+df2$edu_ <- factor(df2$DMDEDUC2, levels = c(1, 2, 3, 4, 5), labels = c("Under High School", "Under High School", 
+                                   "High School Graduate", "College Graduate", "Postgraduate Degree"))
 # disease condition
 df2 <- df2 %>% mutate(is_disease = case_when(
   MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1 ~ 1,
   MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2 ~ 0
 ))
 # smoke condition
-df2 <- df2 %>% mutate(smoke = case_when(
-  SMQ020 == 2 ~ 0,
-  SMQ040 == 3 & SMQ020 == 1 ~ 1,
-  SMQ040 == 1 | SMQ040 == 2 ~ 2
+df2 <- df2 %>% mutate(smoke_ = case_when(
+  SMQ020 == 2 ~ "Never",
+  SMQ040 == 3 & SMQ020 == 1 ~ "Quit",
+  SMQ040 == 1 | SMQ040 == 2 ~ "Now"
 ))
-df3 <- df2[complete.cases(df2[,c("is_disease", "RIDAGEYR", "BMXBMI", "education_group", "PLEVEL", "smoke")]),]
+df3 <- df2[complete.cases(df2[,c("is_disease", "RIDAGEYR", "BMXBMI", "edu_", "PLevel_", "smoke_")]),]
 ```
 #age distribution
 ```{r}
@@ -183,6 +183,7 @@ df2 %>% filter(age_group == "40-59" & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
 df2 %>% filter(age_group == "60-80" & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) #group3
 df2 %>% filter(age_group == "60-80" & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
 ```
+
 
 
 #gender filter
@@ -453,6 +454,27 @@ round(chisq$residuals,2)
 alpha <- .05
 alpha_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
+t_crit
+```
+#2-way chi square Gender
+```{r}
+# create matrix with 2 columns and 5 rows
+data= matrix(c(1795,8721,2321,8849), ncol=2, byrow=TRUE)
+ 
+# specify the column names and row names of matrix
+colnames(data) = c('Ever have respirator disease','None case')
+rownames(data) <- c('Male','Female')
+# assign to table
+gen_dis=as.table(data)
+
+#chi square test
+chisq <- chisq.test(gen_dis)
+chisq
+round(chisq$residuals,2)
+alpha <- .05
+alpha_adj <- alpha/(nrow(data)*ncol(data))
+t_crit <- qnorm(alpha_adj/2)
+t_crit
 ```
 
 #2-way chi square Education Level
@@ -473,6 +495,7 @@ round(chisq$residuals,2)
 alpha <- .05
 alpha_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
+t_crit
 ```
 
 #2-way chi square Smoking habit
@@ -493,14 +516,12 @@ round(chisq$residuals,2)
 alpha <- .05
 alpha_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
+t_crit
 ```
 
 #logistic regression 
 ```{r}
 df3$is_disease <- factor(df3$is_disease)
-df3$education_group <- factor(df3$education_group)
-df3$smoke <- factor(df3$smoke)
-df3$PLEVEL <- factor(df3$PLEVEL)
 
 #split data
 df3.spilt <- sample(1:nrow(df3),size = ceiling(0.80*nrow(df3)),replace = FALSE)
@@ -509,7 +530,8 @@ df3.train <- df3[df3.spilt,]
 # test set
 df3.test <- df3[-df3.spilt,]
 
-log <- glm(is_disease ~ smoke + RIDAGEYR + BMXBMI + PLEVEL + education_group, family = "binomial", data = df3.train)
+log <- glm(is_disease ~ smoke_ + RIAGENDR + RIDAGEYR + BMXBMI + PLevel_ + edu_, family = "binomial", data = df3.train)
+
 summary(log)
 ```
 
@@ -517,6 +539,11 @@ summary(log)
 df3.test$pre_disease <- predict(log, newdata = df3.test, type = "response")
 df3.test$pre_disease
 ```
+
+```{r}
+df3.test[,c("is_disease", "RIDAGEYR", "RIAGENDR", "BMXBMI","PLevel_","edu_", "smoke_", "pre_disease")]
+```
+
 
 
 
