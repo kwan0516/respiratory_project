@@ -144,6 +144,7 @@ df_1718_2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 df2 %>% filter(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)
 # poverty level
 df2$PLevel_ = cut(df2$INDFMPIR, breaks = c(0,1.5, 4, 6), labels = c("Low", "Medium", "High"))
+df2$PLevel = cut(df2$INDFMPIR, breaks = c(0,1.5, 4, 6), labels = c(1, 2, 3))
 # group it to Less than High School (Group 1), High School Graduate (Group 2), College Graduate (Group 3), and Postgraduate Degree (Group 4)
 df2$edu_ <- factor(df2$DMDEDUC2, levels = c(1, 2, 3, 4, 5), labels = c("Under High School", "Under High School", 
                                    "High School Graduate", "College Graduate", "Postgraduate Degree"))
