@@ -217,6 +217,83 @@ df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K
 df2 %>% filter(SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) 
 ```
 
+#Gender smoke
+```{r}
+df2 %>% filter(RIAGENDR == 1 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Male Never smoke have disease
+df2 %>% filter(RIAGENDR == 1 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Male Never smoke no disease
+
+df2 %>% filter(RIAGENDR == 1 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Male quit have disease
+df2 %>% filter(RIAGENDR == 1 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Male quit no disease
+
+df2 %>% filter(RIAGENDR == 1 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Male now smoke have disease
+df2 %>% filter(RIAGENDR == 1 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Male now smoke no disease
+
+df2 %>% filter(RIAGENDR == 2 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Female Never smoke have disease
+df2 %>% filter(RIAGENDR == 2 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Female Never smoke no disease
+
+df2 %>% filter(RIAGENDR == 2 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Female quit have disease
+df2 %>% filter(RIAGENDR == 2 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Female quit no disease
+
+df2 %>% filter(RIAGENDR == 2 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Female now smoke have disease
+df2 %>% filter(RIAGENDR == 2 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Female now smoke no disease
+```
+
+```{r}
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Less than high school ever smoke have disease
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Less than high school ever smoke no disease
+
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) #  Less than high school now smoke have disease
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) #  Less than high school now smoke no disease
+
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) #  Less than high school quit have disease
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) #  Less than high school quit no disease
+
+df2 %>% filter(DMDEDUC2 == 3 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # High school graduate now smoke have disease
+df2 %>% filter(DMDEDUC2 == 3 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # High school graduate now smoke no disease
+
+df2 %>% filter(DMDEDUC2 == 3 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # High school graduate quit have disease
+df2 %>% filter(DMDEDUC2 == 3 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # High school graduate quit no disease
+
+df2 %>% filter(DMDEDUC2 == 3 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # High school graduate ever smoke have disease
+df2 %>% filter(DMDEDUC2 == 3 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # High school graduate  ever smoke no disease
+
+df2 %>% filter(DMDEDUC2 == 4 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # College graduate now smoke have disease
+df2 %>% filter(DMDEDUC2 == 4 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # College graduate now smoke have disease
+
+df2 %>% filter(DMDEDUC2 == 4 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # College graduate quit have disease
+df2 %>% filter(DMDEDUC2 == 4 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # College graduate quit have disease
+
+df2 %>% filter(DMDEDUC2 == 4 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # College graduate Never smoke have disease
+df2 %>% filter(DMDEDUC2 == 4 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # College graduate Never smoke have disease
+
+df2 %>% filter(DMDEDUC2 == 5 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Postgraduate degree now smoke have disease
+df2 %>% filter(DMDEDUC2 == 5 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Postgraduate degree now smoke have disease
+
+df2 %>% filter(DMDEDUC2 == 5 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Postgraduate degree quit have disease
+df2 %>% filter(DMDEDUC2 == 5 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Postgraduate degree quit have disease
+
+df2 %>% filter(DMDEDUC2 == 5 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Postgraduate degree Never smoke have disease
+df2 %>% filter(DMDEDUC2 == 5 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Postgraduate degree Never smoke have disease
+
+```
+
+```{r}
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 1 | DMDEDUC2 == 2)
+
+df2 %>% filter(DMDEDUC2 == 3 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(DMDEDUC2 == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 3)
+
+df2 %>% filter(DMDEDUC2 == 4 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(DMDEDUC2 == 4 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 4)
+
+df2 %>% filter(DMDEDUC2 == 5 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
+df2 %>% filter(DMDEDUC2 == 5 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
+df2 %>% filter(DMDEDUC2 == 5)
+```
 
 #BMI filter
 ```{r}
@@ -256,6 +333,7 @@ df2 %>% filter(PLEVEL == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
 df2 %>% filter(PLEVEL == 3)
 ```
 
+#edu filter
 ```{r}
 df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
 df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
@@ -387,7 +465,6 @@ round(chisq$residuals,2)
 alpha <- .05
 alpha_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
-cohenW(BMI_dis)
 ```
 
 #2-way chi square BMI group with now smoking
@@ -406,7 +483,7 @@ round(chisq$residuals,2)
 alpha <- .05
 alpa_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
-cohenW(BMI_dis)
+#cohenW(BMI_dis)
 ```
 #2-way chi square BMI group with quit smoking
 ```{r}
@@ -545,6 +622,50 @@ df3.test$pre_disease
 df3.test[,c("is_disease", "RIDAGEYR", "RIAGENDR", "BMXBMI","PLevel_","edu_", "smoke_", "pre_disease")]
 ```
 
+#Gender smoking disease 3-way table 
+```{r}
+gender = c("male", "female")
+disease = c("have", "non")
+s_habit = c("now", "quit", "never")
+t_table=expand.grid(disease=disease, s_habit=s_habit, gender=gender)
+n = c(484,1954,570,2521,650,4245,546,1203,517,1401,1256,6240)
+t_table = cbind(t_table, count=n)
+t_table
+temp = xtabs(count~disease+s_habit+gender, t_table)
+temp
+```
+```{r}
+Frequency=as.vector(margin.table(temp,1))
+CumFrequency=cumsum(Frequency)
+cbind(disease,Frequency=Frequency,Percentage=Frequency/sum(Frequency),CumFrequency=CumFrequency,CumPercentage=CumFrequency/sum(Frequency))
+```
 
+```{r}
+Frequency=as.vector(margin.table(temp,2))
+CumFrequency=cumsum(Frequency)
+cbind(s_habit,Frequency=Frequency,Percentage=Frequency/sum(Frequency),CumFrequency=CumFrequency,CumPercentage=CumFrequency/sum(Frequency))
+```
+
+```{r}
+Frequency=as.vector(margin.table(temp,3))
+CumFrequency=cumsum(Frequency)
+cbind(gender,Frequency=Frequency,Percentage=Frequency/sum(Frequency),CumFrequency=CumFrequency,CumPercentage=CumFrequency/sum(Frequency))
+```
+
+```{r}
+E=array(NA,dim(temp))
+for (i in 1:dim(temp)[1]) {
+for (j in 1:dim(temp)[2]) {
+for (k in 1:dim(temp)[3]) {
+E[i,j,k]=(margin.table(temp,3)[k]*margin.table(temp,2)[j]*margin.table(temp,1))[i]/(sum(temp))^2
+}}}
+E
+```
+
+```{r}
+edu = c("Less than High School", "High School Gradute")
+disease = c("have", "non")
+s_habit = c("now", "quit", "never")
+```
 
 
