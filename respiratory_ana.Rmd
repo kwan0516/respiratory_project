@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(foreign)
 library(tidyverse)
 library(ggplot2)
+library("dplyr")
+library("ggpubr")
 ```
 
 #Collected data from each cohort of NHANES Demographic Variables, Body Measures, Medical Conditions and Smoking - Cigarette Use dataset.
@@ -333,6 +335,36 @@ df2 %>% filter(PLEVEL == 3 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2)
 df2 %>% filter(PLEVEL == 3)
 ```
 
+#Poverty smoke disease filter
+```{r}
+df2 %>% filter(PLEVEL == 1 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # now smoke have disease
+df2 %>% filter(PLEVEL == 1 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # now smoke no disease
+
+df2 %>% filter(PLEVEL == 1 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # quit have disease
+df2 %>% filter(PLEVEL == 1 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # quit no disease
+
+df2 %>% filter(PLEVEL == 1 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Never smoke have disease
+df2 %>% filter(PLEVEL == 1 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Never smoke no disease
+
+df2 %>% filter(PLEVEL == 2 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # now smoke have disease
+df2 %>% filter(PLEVEL == 2 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # now smoke no disease
+
+df2 %>% filter(PLEVEL == 2 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # quit have disease
+df2 %>% filter(PLEVEL == 2 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # quit no disease
+
+df2 %>% filter(PLEVEL == 2 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Never smoke have disease
+df2 %>% filter(PLEVEL == 2 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Never smoke no disease
+
+df2 %>% filter(PLEVEL == 3 & (SMQ040 == 1 | SMQ040 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # now smoke have disease
+df2 %>% filter(PLEVEL == 3 & (SMQ040 == 1 | SMQ040 == 2) & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # now smoke no disease
+
+df2 %>% filter(PLEVEL == 3 & SMQ040 == 3 & SMQ020 == 1 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # quit have disease
+df2 %>% filter(PLEVEL == 3 & SMQ040 == 3 & SMQ020 == 1 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # quit no disease
+
+df2 %>% filter(PLEVEL == 3 & SMQ020 == 2 & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1)) # Never smoke have disease
+df2 %>% filter(PLEVEL == 3 & SMQ020 == 2 & MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2) # Never smoke no disease
+```
+
 #edu filter
 ```{r}
 df2 %>% filter((DMDEDUC2 == 1 | DMDEDUC2 == 2) & (MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1))
@@ -465,6 +497,7 @@ round(chisq$residuals,2)
 alpha <- .05
 alpha_adj <- alpha/(nrow(data)*ncol(data))
 t_crit <- qnorm(alpha_adj/2)
+```
 
 #2-way chi square BMI group with now smoking
 ```{r}
@@ -633,6 +666,7 @@ t_table
 temp = xtabs(count~disease+s_habit+gender, t_table)
 temp
 ```
+
 ```{r}
 Frequency=as.vector(margin.table(temp,1))
 CumFrequency=cumsum(Frequency)
@@ -661,10 +695,31 @@ E[i,j,k]=(margin.table(temp,3)[k]*margin.table(temp,2)[j]*margin.table(temp,1))[
 E
 ```
 
+
+#BMI cleaning (df2$BMXBMI)
 ```{r}
-edu = c("Less than High School", "High School Gradute")
-disease = c("have", "non")
-s_habit = c("now", "quit", "never")
+summary(df2$BMXBMI)
+out_BMI <- df2 %>% filter(BMXBMI > (32.9 + 1.5*(32.9-24.3)) | BMXBMI < (24.3 - 1.5*(32.9-24.3)))
+valid_BMI <- df2 %>% filter(BMXBMI <= (32.9 + 1.5*(32.9-24.3)) & BMXBMI >= (24.3 - 1.5*(32.9-24.3)))
+nrow(out_BMI)
+nrow(valid_BMI)
+length(boxplot(df2$BMXBMI)$out)
+
 ```
 
+
+#BMI disease smoking group 2-way table
+```{r}
+BMI_group = c("Under weight", "Healthy", "Overweight", "Obesity", "Sever obesity")
+disease = c("have", "non")
+s_habit = c("now", "quit", "never")
+
+t_table=expand.grid(disease=disease, s_habit=s_habit, BMI_group=BMI_group)
+n = c(38,93,290,1011,256,990,306,844,118,178,17,33,197,890,323,1378,377,1284,156,247,23,169,435,3085,527,3343,632,3076,267,679)
+t_table = cbind(t_table, count=n)
+t_table
+temp_BMI = xtabs(count~disease+s_habit+BMI_group, t_table)
+margin.table(margin.table(temp_BMI,3),1)
+
+```
 
