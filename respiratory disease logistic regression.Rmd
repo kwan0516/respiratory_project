@@ -1,0 +1,109 @@
+---
+title: "respiratory disease logistic regression"
+author: "KuanCheng"
+date: "2025-03-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r pressure, echo=FALSE}
+df_out <- read.csv("clean_df.csv", header = TRUE)
+#split major data (ever have respiratory disease) and mionr data (Non case)
+df_maj <- df_out %>% filter(is_disease == "0") 
+df_min <- df_out %>% filter(is_disease == "1")
+nrow(df_maj)
+nrow(df_min)
+
+#scaling numerical data, prepare for k-means
+df_maj$sc_age <- scale(df_maj$RIDAGEYR)
+df_maj$sc_BMI <- scale(df_maj$BMXBMI)
+df_maj_km <- df_maj %>% select(sc_age, sc_BMI)
+
+df_min$sc_age <- scale(df_min$RIDAGEYR)
+df_min$sc_BMI <- scale(df_min$BMXBMI)
+df_min_km <- df_min %>% select(sc_age, sc_BMI)
+```
+
+###train test split
+```{r}
+#major data 
+#split data
+df_maj.spilt <- sample(1:nrow(df_maj_km),size = ceiling(0.80*nrow(df_maj_km)),replace = FALSE)
+# training set
+df_maj.train <- df_maj_km[df_maj.spilt,]
+# test set
+df_maj.test <- df_maj_km[-df_maj.spilt,]
+nrow(df_maj.train)
+nrow(df_maj.test)
+#minor data
+#split data
+df_min.spilt <- sample(1:nrow(df_min_km),size = ceiling(0.80*nrow(df_min_km)),replace = FALSE)
+# training set
+df_min.train <- df_min_km[df_min.spilt,]
+# test set
+df_min.test <- df_min_km[-df_min.spilt,]
+nrow(df_min.train)
+nrow(df_min.test)
+```
+###apply k-means
+```{r}
+set.seed(123)
+# Compute k-means with k = 2 - major data
+km_maj <- kmeans(df_maj.train, 2, nstart = 25)
+aggregate(df_maj.train, by=list(cluster=km_maj$cluster), mean)
+
+```
+
+### Compute silhouette score of the major clusters
+```{r}
+silhouette_scores <- silhouette(km_maj$cluster, dist(df_maj.train))
+maj_silhouette_scores <- as.data.frame(silhouette_scores)
+maj_c1 <- maj_silhouette_scores[maj_silhouette_scores$cluster == 1, ]
+maj_c2 <- maj_silhouette_scores[maj_silhouette_scores$cluster == 2, ]
+avg_c1 <- mean(maj_c1[, 3])
+avg_c2 <- mean(maj_c2[, 3])
+#choose the cluster with the higher silhouette score  
+avg_c1
+avg_c2
+```
+
+
+###apply k-means on major group cluster 1
+```{r}
+# Compute k-means with k = 2 - major data cluster 1
+df_maj_c1 <- df_maj.train[km_maj$cluster == 1, ]
+km_maj_c1 <- kmeans(df_maj_c1, 2, nstart = 25)
+km_maj_c1$size
+```
+
+### Compute silhouette score of the major cluster1's cluster
+```{r}
+s_scores <- silhouette(km_maj_c1$cluster, dist(df_maj_c1))
+maj_s_score_c1 <- as.data.frame(s_scores)
+maj_c11 <- maj_s_score_c1[maj_s_score_c1$cluster == 1,]
+maj_c12 <- maj_s_score_c1[maj_s_score_c1$cluster == 2,]
+avg_c11 <- mean(maj_c11[,3])
+avg_c12 <- mean(maj_c12[,3])
+avg_c11
+avg_c12
+```
+
+
+
+
+###extract the major train data we want to combine with minor train data
+```{r}
+maj.train.final <- df_maj_c1[km_maj_c1$cluster == 2, ]
+```
+
+###combine major train and minor train data as our logistic regression training dataframe
+```{r}
+index_reg <- rbind(maj.train.final, df_min.train)
+index_reg$seq <- as.numeric(rownames(index_reg))
+df_reg <- df2[rownames(df2) %in% index_reg$seq, ]
+write.csv(df_reg, "logistic train df.csv", row.names = FALSE)
+```
