@@ -197,7 +197,7 @@ df2 %>% drop_na(smoke_)
 gender_smoke_summary <- df2 %>% drop_na(smoke_) %>% 
   group_by(RIAGENDR, smoke_) %>% 
   summarise(
-    TotalEverDisease = sum(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1, na.rm = TRUE),
+    EverDisease = sum(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1, na.rm = TRUE),
     NonCase = sum(MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2, na.rm = TRUE),
     .groups = "drop"
   ) %>%
@@ -206,35 +206,35 @@ gender_smoke_summary <- df2 %>% drop_na(smoke_) %>%
 gender_smoke_summary
 ```
 
-
+#chi squared test grouped by smoking status
 ```{r}
 #Create gender now smoke df
-now_chi <- chisq.test(gender_smoke_summary[gender_smoke_summary$smoke_ == "Now",] %>% select(TotalEverDisease, NonCase))
+now_chi <- chisq.test(gender_smoke_summary[gender_smoke_summary$smoke_ == "Now",] %>% select(EverDisease, NonCase))
 df_g_now <- as.data.frame(now_chi$residuals)
 rownames(df_g_now) <- c("male", "female")
 df_g_now$gender <- rownames(df_g_now)
-df_g_now$status <- "Now"
+df_g_now$status <- "Now smoking"
 df_g_now
 
 #Create gender quit smoke df
-quit_chi <- chisq.test(gender_smoke_summary[gender_smoke_summary$smoke_ == "Quit",] %>% select(TotalEverDisease, NonCase))
+quit_chi <- chisq.test(gender_smoke_summary[gender_smoke_summary$smoke_ == "Quit",] %>% select(EverDisease, NonCase))
 df_g_quit <- as.data.frame(quit_chi$residuals)
 rownames(df_g_quit) <- c("male", "female")
 df_g_quit$gender <- rownames(df_g_quit)
-df_g_quit$status <- "Quit"
+df_g_quit$status <- "Quit smoking"
 df_g_quit
 
 #Create gender quit smoke df
-never_chi <- chisq.test(gender_smoke_summary[gender_smoke_summary$smoke_ == "Never",] %>% select(TotalEverDisease, NonCase))
+never_chi <- chisq.test(gender_smoke_summary[gender_smoke_summary$smoke_ == "Never",] %>% select(EverDisease, NonCase))
 df_g_never <- as.data.frame(never_chi$residuals)
 rownames(df_g_never) <- c("male", "female")
 df_g_never$gender <- rownames(df_g_never)
-df_g_never$status <- "Never"
+df_g_never$status <- "Never smoking"
 df_g_never
 
 df_gender_std <- rbind(df_g_now,df_g_quit,df_g_never)
 df_gender_std <- df_gender_std %>%
-  pivot_longer(cols = c(TotalEverDisease, NonCase), 
+  pivot_longer(cols = c(EverDisease, NonCase), 
                names_to = "disease_type", 
                values_to = "std")
 df_gender_std
@@ -257,7 +257,8 @@ p_gender_smoke <- ggplot(df_gender_std, aes(x = interaction(factor(gender, level
   theme_minimal() +
   labs(x = "Gender & Smoking Status", y = "Standard Residual", fill = "Disease Type", title = "Pro-hoc analysis of gender ", subtitle = "z critical value = ±1.96") +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
-ggsave("gender_smoke.jpg", p_gender_smoke)
+p_gender_smoke
+# ggsave("gender_smoke.jpg", p_gender_smoke)
 ```
 
 
@@ -277,6 +278,7 @@ smoke_chi <- chisq.test(smoke_chi_table)
 smoke_chi$observed
 smoke_chi$expected
 smoke_chi$residuals
+smoke_chi
 ```
 
 
@@ -328,7 +330,7 @@ poverty_chi$residuals
 poverty_smoke_summary <- df2 %>% drop_na(smoke_, PLevel_) %>% 
   group_by(PLevel_, smoke_) %>% 
   summarise(
-    TotalEverDisease = sum(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1, na.rm = TRUE),
+    EverDisease = sum(MCQ010 == 1 | MCQ160G == 1 | MCQ160K == 1, na.rm = TRUE),
     NonCase = sum(MCQ010 == 2 & MCQ160G == 2 & MCQ160K == 2, na.rm = TRUE),
     .groups = "drop"
   ) %>%
@@ -340,46 +342,48 @@ poverty_smoke_summary
 
 ```{r}
 #Create poverty now smoke df
-poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Now",] %>% select(TotalEverDisease, NonCase)
-now_chi <- chisq.test(poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Now",] %>% select(TotalEverDisease, NonCase))
+poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Now",] %>% select(EverDisease, NonCase)
+now_chi <- chisq.test(poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Now",] %>% select(EverDisease, NonCase))
 df_p_now <- as.data.frame(now_chi$residuals)
 rownames(df_p_now) <- c("Low", "Medium", "High")
 df_p_now$poverty <- rownames(df_p_now)
-df_p_now$status <- "Now"
+df_p_now$status <- "Now smkoing"
 df_p_now
 
 #Create poverty quit smoke df
-quit_chi <- chisq.test(poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Quit",] %>% select(TotalEverDisease, NonCase))
+quit_chi <- chisq.test(poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Quit",] %>% select(EverDisease, NonCase))
 df_p_quit <- as.data.frame(quit_chi$residuals)
 rownames(df_p_quit) <- c("Low", "Medium", "High")
 df_p_quit$poverty <- rownames(df_p_quit)
-df_p_quit$status <- "Quit"
+df_p_quit$status <- "Quit smkoing"
 df_p_quit
 
 #Create poverty quit smoke df
-never_chi <- chisq.test(poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Never",] %>% select(TotalEverDisease, NonCase))
+never_chi <- chisq.test(poverty_smoke_summary[poverty_smoke_summary$smoke_ == "Never",] %>% select(EverDisease, NonCase))
 df_p_never <- as.data.frame(never_chi$residuals)
 rownames(df_p_never) <- c("Low", "Medium", "High")
 df_p_never$poverty <- rownames(df_p_never)
-df_p_never$status <- "Never"
+df_p_never$status <- "Never smkoing"
 df_p_never
 
 df_poverty_std <- rbind(df_p_now,df_p_quit,df_p_never)
 df_poverty_std <- df_poverty_std %>%
-  pivot_longer(cols = c(TotalEverDisease, NonCase), 
+  pivot_longer(cols = c(EverDisease, NonCase), 
                names_to = "disease_type", 
                values_to = "std")
 df_poverty_std
+write.csv(df_poverty_std, "poverty_smoke.csv", row.names = FALSE )
 ```
 
+
+#Poverty level chi squared dev bar chart
 ```{r}
-# x= factor(smoke_, levels = c("Never", "Quit", "Now")
 p_poverty_smoke <- ggplot(df_poverty_std, aes(x = interaction(factor(poverty, levels = c("Low", "Medium", "High")), factor(status, levels = c("Now", "Quit", "Never"))), y = std, fill = disease_type)) +
   geom_bar(stat = "identity", position = "dodge") +  # Bar plot
   geom_hline(yintercept = 0, color = "black") +  # Add horizontal line at y=0
   geom_hline(yintercept = 2.45, color = "black", linetype = "dotted" ) +
   geom_hline(yintercept = -2.45, color = "black", linetype = "dotted" ) +  # Add hline
-  scale_fill_manual(values = c("gray90", "gray40"), labels = c("TotalEverDisease" = "EverDisease")) +  # Color mapping
+  scale_fill_manual(values = c("lightblue", "gray"), labels = c("TotalEverDisease" = "EverDisease")) +  # Color mapping
   scale_x_discrete(labels = c("Low.Now" = "Low/Now Smoking", 
                               "Medium.Now" = "Medium/Now Smoking", 
                               "High.Now" = "High/Now Smoking",
@@ -392,8 +396,8 @@ p_poverty_smoke <- ggplot(df_poverty_std, aes(x = interaction(factor(poverty, le
   theme_minimal() +
   labs(x = "Poverty Level & Smoking Status", y = "Standard Residual", fill = "Disease Type", title = "Pro-hoc analysis of poverty in differernt smoking status", subtitle = "z critical value = ±2.45") +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
-
-ggsave("poverty_smoke.jpg", p_poverty_smoke, width = 10)
+p_poverty_smoke
+# ggsave("poverty_smoke.jpg", p_poverty_smoke, width = 10)
 ```
 
 
@@ -468,14 +472,16 @@ df_BMI_std <- df_BMI_std %>%
 df_BMI_std
 ```
 
+#BMI chi squared dev bar chart
 ```{r}
-# x= factor(smoke_, levels = c("Never", "Quit", "Now")
-p_BMI_smoke <- ggplot(df_BMI_std, aes(x = interaction(factor(BMI_group, levels = c("Under Weeight", "Healthy", "Overweight", "Obesity", "Severe obesity")), factor(status, levels = c("Now", "Quit", "Never"))), y = std, fill = disease_type)) +
+p_BMI_smoke <- ggplot(df_BMI_std, aes(
+  x = interaction(factor(BMI_group, levels = c("Under Weeight", "Healthy", "Overweight", "Obesity", "Severe obesity")), 
+                  factor(status, levels = c("Now", "Quit", "Never"))), y = std, fill = factor(disease_type, levels = c("NonCase", "totalDisease")))) +
   geom_bar(stat = "identity", position = "dodge") +  # Bar plot
   geom_hline(yintercept = 0, color = "black") +  # Add horizontal line at y=0
   geom_hline(yintercept = 3.08, color = "black", linetype = "dotted" ) +
   geom_hline(yintercept = -3.08, color = "black", linetype = "dotted" ) +
-  scale_fill_manual(values = c("gray90", "gray40"), labels = c("totalDisease" = "EverDisease")) +  # Color mapping
+  scale_fill_manual(values = c("lightblue", "gray"), labels = c("totalDisease" = "EverDisease")) +  # Color mapping
   scale_x_discrete(labels = c("Under Weeight.Now" = "Under Weight/Now Smoking", 
                               "Healthy.Now" = "Healthy/Now Smoking", 
                               "Overweight.Now" = "Overweight/Now Smoking",
@@ -494,7 +500,8 @@ p_BMI_smoke <- ggplot(df_BMI_std, aes(x = interaction(factor(BMI_group, levels =
   theme_minimal() +
   labs(x = "BMI & Smoking Status", y = "Standard Residual", fill = "Disease Type", title = "Pro-hoc analysis of BMI group ", subtitle = "z critical value = ±3.08") +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
-ggsave("BMI_smoke.jpg", p_BMI_smoke, width = 10)
+p_BMI_smoke
+# ggsave("BMI_smoke.jpg", p_BMI_smoke, width = 10)
 ```
 
 #edu group
@@ -564,6 +571,7 @@ df_edu_std <- df_edu_std %>%
 df_edu_std
 ```
 
+#Education level chi squared dev bar chart
 ```{r}
 # x= factor(smoke_, levels = c("Never", "Quit", "Now")
 p_edu_smoke <- ggplot(df_edu_std, aes(x = interaction(factor(edu_group, levels = c("Under High School", "High School Graduate", "College Graduate", "Postgraduate Degree")), factor(status, levels = c("Now", "Quit", "Never"))), y = std, fill = disease_type)) +
@@ -571,7 +579,7 @@ p_edu_smoke <- ggplot(df_edu_std, aes(x = interaction(factor(edu_group, levels =
   geom_hline(yintercept = 0, color = "black") +  # Add horizontal line at y=0
   geom_hline(yintercept = 2.80, color = "black", linetype = "dotted" ) +
   geom_hline(yintercept = -2.80, color = "black", linetype = "dotted" ) +
-  scale_fill_manual(values = c("gray90", "gray40"), labels = c("totalDisease" = "EverDisease")) +  # Color mapping
+  scale_fill_manual(values = c("lightblue", "gray"), labels = c("totalDisease" = "EverDisease")) +  # Color mapping
   scale_x_discrete(labels = c("Under High School.Now" = "Under high school/Now Smoking", 
                               "High School Graduate.Now" = "High school graduate/Now Smoking", 
                               "College Graduate.Now" = "College graduate/Now Smoking",
@@ -588,32 +596,9 @@ p_edu_smoke <- ggplot(df_edu_std, aes(x = interaction(factor(edu_group, levels =
   labs(x = "Education Level & Smoking Status", y = "Standard Residual", fill = "Disease Type", title = "Pro-hoc analysis of education group ", subtitle = "z critical value = ±2.80") +
   theme(axis.text.x = element_text(angle = 30, hjust = 1),legend.position = "top")
 
-ggsave("edu_smoke.jpg", p_edu_smoke, width = 10)
+p_edu_smoke
+# ggsave("edu_smoke.jpg", p_edu_smoke, width = 10)
 ```
-
-
-```{r}
-E=array(NA,dim(temp))
-for (i in 1:dim(temp)[1]) {
-for (j in 1:dim(temp)[2]) {
-for (k in 1:dim(temp)[3]) {
-E[i,j,k]=(margin.table(temp,3)[k]*margin.table(temp,2)[j]*margin.table(temp,1))[i]/(sum(temp))^2
-}}}
-E
-```
-
-
-#BMI cleaning (df2$BMXBMI)
-```{r}
-summary(df2$BMXBMI)
-out_BMI <- df2 %>% filter(BMXBMI > (32.9 + 1.5*(32.9-24.3)) | BMXBMI < (24.3 - 1.5*(32.9-24.3)))
-valid_BMI <- df2 %>% filter(BMXBMI <= (32.9 + 1.5*(32.9-24.3)) & BMXBMI >= (24.3 - 1.5*(32.9-24.3)))
-nrow(out_BMI)
-nrow(valid_BMI)
-length(boxplot(df2$BMXBMI)$out)
-
-```
-
 
 ###k_means
 ###deal with outliers
@@ -847,9 +832,3 @@ reg_FP
 reg_TN
 reg_FN
 ```
-
-```{r}
-table(df2["RIAGENDR", "is_disease"])
-table(df2[""])
-```
-

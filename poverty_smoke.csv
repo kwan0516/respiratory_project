@@ -1,0 +1,19 @@
+"poverty","status","disease_type","std"
+"Low","Now smkoing","EverDisease",2.93046334061414
+"Low","Now smkoing","NonCase",-1.68008804861926
+"Medium","Now smkoing","EverDisease",-2.3317226837523
+"Medium","Now smkoing","NonCase",1.33681911640828
+"High","Now smkoing","EverDisease",-2.27447396074365
+"High","Now smkoing","NonCase",1.30399737999803
+"Low","Quit smkoing","EverDisease",2.9119516227485
+"Low","Quit smkoing","NonCase",-1.53417319406995
+"Medium","Quit smkoing","EverDisease",-0.223260644315442
+"Medium","Quit smkoing","NonCase",0.11762575075895
+"High","Quit smkoing","EverDisease",-3.03701238998965
+"High","Quit smkoing","NonCase",1.60006195239695
+"Low","Never smkoing","EverDisease",2.3556399564001
+"Low","Never smkoing","NonCase",-1.0155403249173
+"Medium","Never smkoing","EverDisease",-0.619484147251492
+"Medium","Never smkoing","NonCase",0.267065911525082
+"High","Never smkoing","EverDisease",-1.82718965665621
+"High","Never smkoing","NonCase",0.787720030204397

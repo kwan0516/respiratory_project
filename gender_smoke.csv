@@ -1,0 +1,13 @@
+"","gender","status","disease_type","std"
+"1","male","Now smoking","EverDisease",-4.72634199338972
+"2","male","Now smoking","NonCase",2.6996437955084
+"3","female","Now smoking","EverDisease",5.58016562524381
+"4","female","Now smoking","NonCase",-3.18734013094438
+"5","male","Quit smoking","EverDisease",-3.86429513562985
+"6","male","Quit smoking","NonCase",2.03671441123471
+"7","female","Quit smoking","EverDisease",4.89849088245869
+"8","female","Quit smoking","NonCase",-2.58179735849272
+"9","male","Never smoking","EverDisease",-3.75201347544118
+"10","male","Never smoking","NonCase",1.59971132823036
+"11","female","Never smoking","EverDisease",3.03197732198636
+"12","female","Never smoking","NonCase",-1.29271616444523
